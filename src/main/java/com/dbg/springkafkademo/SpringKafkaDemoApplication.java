@@ -78,14 +78,14 @@ public class SpringKafkaDemoApplication {
     If they were specified to listen to the same topic and partition, only one would get assigned that topic and partition and the other
     would sit idle.
 
-    kafka-topics --create --topic test-topic-1 --zookeeper localhost:2181 --replication-factor 1
+    kafka-topics --create --topic test-topic-1 --partitions 1 --zookeeper localhost:2181 --replication-factor 1
     kafka-topics --create --topic test-topic-2 --partitions 2 --zookeeper localhost:2181 --replication-factor 1
      */
     /*
     This listener will listen to partition 0 on test-topic-1 and partition 1 on test-topic-2
      */
     @KafkaListener(id = "test_listener_id_1",
-            groupId = "test_group_1",
+            groupId = "test_group_2",
             containerFactory = "myKafkaListenerContainerFactory",
             topicPartitions = {@TopicPartition(topic = "test-topic-1", partitions = {"0"}), @TopicPartition(topic = "test-topic-2", partitions = {"1"})})
     public void processMessage(String message,
@@ -97,7 +97,7 @@ public class SpringKafkaDemoApplication {
     This listener will listen to partition 0 of test-topic-2
      */
     @KafkaListener(id = "test_listener_id_2",
-            groupId = "test_group_1",
+            groupId = "test_group_2",
             containerFactory = "myKafkaListenerContainerFactory",
             topicPartitions = @TopicPartition(topic = "test-topic-2", partitions = {"0"}))
     public void processMessage1(String message,
